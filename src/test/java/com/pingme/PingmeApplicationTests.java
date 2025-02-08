@@ -1,4 +1,4 @@
-package com.pingme.pingme;
+package com.pingme;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

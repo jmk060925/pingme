@@ -1,4 +1,4 @@
-package com.pingme.pingme;
+package com.pingme;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
