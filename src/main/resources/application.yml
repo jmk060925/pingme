@@ -2,7 +2,7 @@ spring:
   application:
     name: pingme
   datasource:
-    url: jdbc:mysql://localhost:3306/pingme_db?useSSL=false
+    url: jdbc:mysql://localhost:3306/pingme_db?allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: rootpassword
   jpa:
