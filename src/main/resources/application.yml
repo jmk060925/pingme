@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: pingme
+  datasource:
+    username: root
+    password: rootpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
