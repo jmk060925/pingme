@@ -1,5 +1,18 @@
 package com.pingme.domain.user.dto;
 
+import com.pingme.domain.user.entity.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDTO {
     private Long id;  // 사용자 ID
 
@@ -11,47 +24,8 @@ public class UserResponseDTO {
 
     private String userIntroduce;  // 한 줄 소개
 
-    public Long getId() {
-        return id;
+    public static UserResponseDTO fromEntity(User user){
+        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUserName(), user.getUserPic(), user.getUserIntroduce());
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public String getUserIntroduce() {
-        return userIntroduce;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
-
-    public void setUserIntroduce(String userIntroduce) {
-        this.userIntroduce = userIntroduce;
-    }
-
-
-    // 기본 생성자 & Getter, Setter
     
 }
