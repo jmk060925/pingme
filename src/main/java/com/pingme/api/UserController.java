@@ -11,13 +11,16 @@ import com.pingme.domain.user.dto.LoginRequestDTO;
 import com.pingme.domain.user.dto.SignupRequestDTO;
 import com.pingme.domain.user.dto.UserResponseDTO;
 import com.pingme.domain.user.service.UserService;
+import com.pingme.infrastructure.jwt.JwtToken;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -28,11 +31,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO){
-        return userService.authenticateUser(loginRequestDTO);
+    public JwtToken login(@RequestBody LoginRequestDTO loginRequestDTO){
+        log.debug("aa");
+        return userService.signIn(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/info/{email}")
     public UserResponseDTO getUser(@PathVariable String email) {
         return userService.getUserProfile(email);
     }

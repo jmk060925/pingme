@@ -1,5 +1,8 @@
 package com.pingme.domain.user.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pingme.domain.user.entity.User;
 
 import jakarta.validation.constraints.Email;
@@ -33,19 +36,23 @@ public class SignupRequestDTO {
 
     private String userIntroduce;  // 한 줄 소개 (선택)
 
+    private List<String> roles = new ArrayList<>();
 
-    // Entity → DTO 변환 메서드
-    public static SignupRequestDTO fromEntity(User user) {
-        return new SignupRequestDTO(user.getEmail(), user.getPwd(), user.getUserName(), user.getUserPic(), user.getUserIntroduce());
-    }
 
-    public User toEntity(){
+    // // Entity → DTO 변환 메서드
+    // public static SignupRequestDTO fromEntity(User user) {
+    //     return new SignupRequestDTO(user.getEmail(), user.getPwd(), user.getUserName(), user.getUserPic(), user.getUserIntroduce());
+    // }
+
+    public User toEntity(String encodedPassword, List<String> roles){
         return User.builder().email(this.email)
-        .pwd(this.password)
+        .pwd(encodedPassword)
         .userName(this.username)
         .userPic(this.profileImageUrl)
         .userIntroduce(this.getUserIntroduce())
+        .roles(roles)
         .build();
+        
     }
     
 }

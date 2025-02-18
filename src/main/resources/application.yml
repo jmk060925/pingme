@@ -26,3 +26,7 @@ springdoc:
     title: "PingMe API 문서"
     description: "PingMe SNS 프로젝트의 API 명세서입니다."
     version: "1.0.0"
+
+jwt:
+  expiration_time: 86400000
+  secret: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
