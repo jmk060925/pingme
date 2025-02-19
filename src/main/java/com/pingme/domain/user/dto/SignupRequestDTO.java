@@ -22,7 +22,7 @@ import lombok.Setter;
 public class SignupRequestDTO {
     @NotBlank
     @Email
-    private String email;  // 이메일 (유니크)
+    private String username;  // 이메일 (유니크)
 
     @NotBlank
     @Size(min = 8, max = 20)
@@ -30,7 +30,7 @@ public class SignupRequestDTO {
 
     @NotBlank
     @Size(min = 2, max = 20)
-    private String username;  // 닉네임 (유니크)
+    private String nickname;  // 닉네임 (유니크)
 
     private String profileImageUrl;  // 프로필 이미지 (선택)
 
@@ -45,9 +45,9 @@ public class SignupRequestDTO {
     // }
 
     public User toEntity(String encodedPassword, List<String> roles){
-        return User.builder().email(this.email)
-        .pwd(encodedPassword)
-        .userName(this.username)
+        return User.builder().username(this.username)
+        .password(encodedPassword)
+        .nickname(this.nickname)
         .userPic(this.profileImageUrl)
         .userIntroduce(this.getUserIntroduce())
         .roles(roles)

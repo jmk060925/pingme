@@ -25,7 +25,7 @@ public class UserResponseDTO {
     private String userIntroduce;  // 한 줄 소개
 
     public static UserResponseDTO fromEntity(User user){
-        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUserName(), user.getUserPic(), user.getUserIntroduce());
+        return new UserResponseDTO(user.getId(), user.getUsername(), user.getNickname(), user.getUserPic(), user.getUserIntroduce());
     }
     
 }

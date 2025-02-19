@@ -34,14 +34,14 @@ public class User implements UserDetails {
     @Column(name="USER_ID", nullable = false)
     private Long Id;
 
-    @Column(name="EMAIL", unique = true, nullable = false)
-    private String email;
+    @Column(name="USERNAME", unique = true, nullable = false)
+    private String username;
 
-    @Column(name="PWD", nullable = false)
-    private String pwd;
+    @Column(name="PASSWORD", nullable = false)
+    private String password;
 
-    @Column(name="USER_NAME", unique = true, nullable = false)
-    private String userName;
+    @Column(name="NICKNAME", unique = true, nullable = false)
+    private String nickname;
 
     @Column(name="USER_PIC")
     private String userPic;
@@ -61,15 +61,15 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.getPwd();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
 
     public String getUserName() {
-        return this.userName;
+        return this.username;
     }
 }

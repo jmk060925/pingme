@@ -68,6 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
-        throw new UnsupportedOperationException("Unimplemented method 'doFilterInternal'");
+        //throw new UnsupportedOperationException("Unimplemented method 'doFilterInternal'");
     }
 }

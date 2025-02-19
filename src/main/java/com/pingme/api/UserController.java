@@ -32,8 +32,7 @@ public class UserController {
 
     @PostMapping("/login")
     public JwtToken login(@RequestBody LoginRequestDTO loginRequestDTO){
-        log.debug("aa");
-        return userService.signIn(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
+        return userService.signIn(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
     }
 
     @GetMapping("/info/{email}")

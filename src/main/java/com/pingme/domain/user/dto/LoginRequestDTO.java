@@ -16,7 +16,7 @@ import lombok.Setter;
 public class LoginRequestDTO {
     @NotBlank
     @Email
-    private String email;  // 로그인 ID (이메일)
+    private String username;  // 로그인 ID (이메일)
 
     @NotBlank
     private String password;  // 비밀번호 (암호화된 상태로 비교)
