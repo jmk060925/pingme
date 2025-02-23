@@ -16,9 +16,9 @@ import lombok.Setter;
 public class UserResponseDTO {
     private Long id;  // 사용자 ID
 
-    private String email;  // 이메일
+    private String username;  // 이메일
 
-    private String username;  // 닉네임
+    private String nickname;  // 닉네임
 
     private String profileImageUrl;  // 프로필 이미지 URL
 

@@ -3,12 +3,13 @@ package com.pingme.domain.user.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.context.annotation.ComponentScan;
 //import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pingme.domain.user.dto.LoginRequestDTO;
 import com.pingme.domain.user.dto.SignupRequestDTO;
 import com.pingme.domain.user.dto.UserResponseDTO;
 import com.pingme.domain.user.entity.User;
@@ -51,28 +51,21 @@ public class UserService implements UserDetailsService {
         return UserResponseDTO.fromEntity(userRepository.save(signupRequestDTO.toEntity(passwordEncoder.encode(signupRequestDTO.getPassword()), roles)));
     }
 
+
     @Transactional
-    public UserResponseDTO authenticateUser(LoginRequestDTO loginRequestDTO) {
-        //로그인 검증 로직 필요
-        boolean matchYn = passwordEncoder.matches(loginRequestDTO.getPassword(), userRepository.findByUsername(loginRequestDTO.getUsername()).get().getPassword());        
+    public UserResponseDTO getUserProfile(String username){
 
-        
-        List<String> roles = new ArrayList<String>();
-        roles.add("USER");
-        
+        Optional<User> user = userRepository.findByUsername(username);
 
-        if(matchYn){
-            return UserResponseDTO.fromEntity(userRepository.findByUsername(loginRequestDTO.getUsername()).get());
+        log.info("username : " + username);
+
+        if(user.isPresent()){
+            return UserResponseDTO.fromEntity(user.get());    
         }else{
-            return UserResponseDTO.builder().build();
+            return new UserResponseDTO();
         }
+            
 
-        
-    }
-
-    @Transactional
-    public UserResponseDTO getUserProfile(String email){
-        return UserResponseDTO.fromEntity(userRepository.findByUsername(email).get());
     }
 
     @Transactional
