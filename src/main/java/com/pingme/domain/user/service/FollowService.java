@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pingme.domain.user.dto.FollowDTO;
+import com.pingme.domain.user.entity.Follow;
 import com.pingme.domain.user.repository.FollowRepository;
 import com.pingme.infrastructure.dto.ResponseDTO;
 
@@ -16,7 +17,6 @@ public class FollowService {
 
     @Autowired
     private FollowRepository followRepository;
-
 
     //팔로워 리스트 조회
     @Transactional
@@ -31,22 +31,26 @@ public class FollowService {
 
     @Transactional
     public FollowDTO requestFollow(FollowDTO request){
-        return followRepository.save(request);
+        return FollowDTO.fromEntity(followRepository.save(request.toEntity()));
     }
 
     @Transactional
-    public ResponseDTO acceptFollow(FollowDTO request){
+    public ResponseDTO acceptFollow(FollowDTO request) throws Exception{
         
         String status = request.getStatus();
 
-        if("Requested".equals(status)){
+        if("pending".equals(status)){
+
             String requesterId = request.getFollowerId();
             String followerId = request.getUserId();
+        
+            Follow newEntity = FollowDTO.builder().userId(requesterId).followerId(followerId).status("accepted").build().toEntity();
+            followRepository.save(newEntity);
 
-            followRepository.save(FollowDTO.builder().userId(requesterId).followerId(followerId).status("Accepted").build());
+             //Update DirtyChecking
+            Follow follow = followRepository.findByUserIdAndFollowerId(request.getUserId(), request.getFollowerId());
+            follow.setStatus("accepted");
 
-            request.setStatus("Accepted");
-            followRepository.save(request);
         }else{
             return ResponseDTO.builder().resultcode("F").msg("Error Occured. Please Contact Administrator.").build();
         }

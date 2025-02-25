@@ -33,7 +33,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/users/register", "/users/login", "/users/info/*").permitAll()
-            .requestMatchers("/users/follow/*").hasRole("USER")
+            //.requestMatchers("/users/follow/*").hasRole("USER")
             .anyRequest().authenticated()
         )
         .exceptionHandling(ex -> ex
@@ -51,7 +51,6 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-        //eturn PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
 

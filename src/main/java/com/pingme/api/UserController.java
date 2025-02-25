@@ -66,7 +66,7 @@ public class UserController {
     
     //팔로우 수락
     @PostMapping("/follow/accept")
-    public ResponseDTO acceptFollow(@RequestBody FollowDTO followDTO){
+    public ResponseDTO acceptFollow(@RequestBody FollowDTO followDTO) throws Exception{
         return followService.acceptFollow(followDTO);
     }
 

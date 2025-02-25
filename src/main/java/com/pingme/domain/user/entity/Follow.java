@@ -1,8 +1,6 @@
 package com.pingme.domain.user.entity;
 
-import java.io.Serializable;
-
-import com.pingme.domain.user.dto.FollowDTO;
+import com.pingme.domain.user.dto.FollowIdentifierDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,12 +11,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
 @Table(name="TB_FOLLOW")
-@IdClass(FollowDTO.class)
 @Getter
+@Setter
+@IdClass(FollowIdentifierDTO.class)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
