@@ -39,7 +39,7 @@ public class PostService {
 
     public ResponseDTO updatePost(PostDTO request){
 
-        Post post = postRepository.findById(request).get();
+        Post post = postRepository.findById(request.getDocNo()).get();
 
         post.setTxtCntn(request.getTxtCntn());
         post.setImgCntn(request.getImgCntn());
