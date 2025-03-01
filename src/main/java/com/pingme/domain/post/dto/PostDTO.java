@@ -43,7 +43,7 @@ public class PostDTO {
         return PostDTO.builder().docNo(entity.getDocNo()).username(entity.getUsername()).txtCntn(entity.getTxtCntn()).imgCntn(entity.getImgCntn()).videoCntn(entity.getVideoCntn()).tag(entity.getTag()).build();
     }
 
-    public Post toEntity(PostDTO postDto){
-        return Post.builder().docNo(postDto.getDocNo()).username(postDto.getUsername()).txtCntn(postDto.getTxtCntn()).imgCntn(postDto.getImgCntn()).videoCntn(postDto.getVideoCntn()).tag(postDto.getTag()).build();
+    public Post toEntity(){
+        return Post.builder().docNo(this.docNo).username(this.username).txtCntn(this.txtCntn).imgCntn(this.imgCntn).videoCntn(this.videoCntn).tag(this.tag).build();
     }
 }

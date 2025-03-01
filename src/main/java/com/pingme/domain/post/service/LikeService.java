@@ -18,7 +18,7 @@ public class LikeService {
 
     public long addLike(LikeDTO request){
 
-        likeRepository.save(request.toEntity(request));
+        likeRepository.save(request.toEntity());
 
         return countLike(request);
     }

@@ -19,13 +19,26 @@ public abstract class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public List<Comment> retrieveComment(CommentDTO request){
-        return commentRepository.findByDocNo(request.getDocNo());
+    public List<CommentDTO> retrieveComment(CommentDTO request){
+        return CommentDTO.fromEntityList(commentRepository.findByDocNo(request.getDocNo()));
     }
 
-    public abstract ResponseDTO createComment(CommentDTO request);
+    public  CommentDTO createComment(CommentDTO request){
+        return CommentDTO.fromEntity(commentRepository.save(request.toEntity()));
+    }
 
-    public abstract ResponseDTO updateComment(CommentDTO request);
+    public ResponseDTO updateComment(CommentDTO request){
+        //commentRepository.findByDocNo(null)
+        Comment comment = commentRepository.findByDocNoAndCommentNo(request.getDocNo(), request.getCommentNo()).get();
+        comment.setTxtCntn(request.getTxtCntn());
 
-    public abstract ResponseDTO deleteComment(CommentDTO request);
+        return ResponseDTO.builder().resultcode("S").msg("").build();
+    }
+
+    public ResponseDTO deleteComment(CommentDTO request){
+
+        commentRepository.delete(request.toEntity());
+
+        return ResponseDTO.builder().resultcode("S").msg("").build();
+    }
 }

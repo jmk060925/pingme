@@ -41,7 +41,7 @@ public class CommentDTO {
         return CommentDTO.builder().commentNo(entity.getCommentNo()).docNo(entity.getDocNo()).username(entity.getUsername()).replyLevel(entity.getReplyLevel()).txtCntn(entity.getTxtCntn()).build();
     }
 
-    public Comment toEntity(CommentDTO CommentDTO){
-        return Comment.builder().commentNo(CommentDTO.getCommentNo()).docNo(CommentDTO.getDocNo()).username(CommentDTO.getUsername()).replyLevel(CommentDTO.getReplyLevel()).txtCntn(CommentDTO.getTxtCntn()).build();
+    public Comment toEntity(){
+        return Comment.builder().commentNo(this.getCommentNo()).docNo(this.getDocNo()).username(this.getUsername()).replyLevel(this.getReplyLevel()).txtCntn(this.getTxtCntn()).build();
     }
 }

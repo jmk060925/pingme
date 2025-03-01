@@ -26,7 +26,7 @@ public class PostService {
 
     public ResponseDTO createPost(PostDTO request){
 
-        PostDTO dto = PostDTO.fromEntity(postRepository.save(request.toEntity(request)));
+        PostDTO dto = PostDTO.fromEntity(postRepository.save(request.toEntity()));
 
         if(dto == null){
             return ResponseDTO.builder().resultcode("F").msg("Posting is failed.").build();
@@ -51,7 +51,7 @@ public class PostService {
     }
 
     public ResponseDTO deletePost(PostDTO request){
-        postRepository.delete(request.toEntity(request));
+        postRepository.delete(request.toEntity());
         return ResponseDTO.builder().resultcode("S").msg("").build();
     }
 }

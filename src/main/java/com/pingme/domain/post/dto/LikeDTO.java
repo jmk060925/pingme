@@ -2,7 +2,6 @@ package com.pingme.domain.post.dto;
 
 
 import com.pingme.domain.post.entity.Like;
-import com.pingme.domain.post.entity.Post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,12 +25,12 @@ public class LikeDTO {
 
     private String username;
 
-     public static LikeDTO fromEntity(Like entity){
-        return LikeDTO.builder().likeId(entity.getLikeId()).docNo(entity.getDocNo()).commentNo(entity.getCommentNo()).username(entity.getUsername()).build();
+    public static LikeDTO fromEntity(Like entity){
+        return LikeDTO.builder().likeId(entity.getLikeId()).targetType(entity.getTargetType()).docNo(entity.getDocNo()).commentNo(entity.getCommentNo()).username(entity.getUsername()).build();
     }
 
-    public Like toEntity(LikeDTO postDto){
-        return Like.builder().likeId(postDto.getLikeId()).docNo(postDto.getDocNo()).commentNo(postDto.getCommentNo()).username(postDto.getUsername()).build();
+    public Like toEntity(){
+        return Like.builder().likeId(this.likeId).targetType(this.targetType).docNo(this.docNo).commentNo(this.commentNo).username(this.username).build();
     }
 
 }
