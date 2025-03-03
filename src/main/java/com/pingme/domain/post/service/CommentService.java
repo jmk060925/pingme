@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public abstract class CommentService {
+public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;

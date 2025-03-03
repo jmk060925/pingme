@@ -1,18 +1,11 @@
 package com.pingme.domain.user.dto;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import org.hibernate.engine.jdbc.SerializableBlobProxy;
 
 import com.pingme.domain.user.entity.Follow;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

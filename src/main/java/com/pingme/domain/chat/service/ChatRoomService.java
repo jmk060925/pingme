@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.pingme.domain.chat.dto.ChatMessageDTO;
 import com.pingme.domain.chat.dto.ChatRoomDTO;
-import com.pingme.domain.chat.entity.ChatRoom;
 import com.pingme.domain.chat.repository.ChatMessageRepository;
 import com.pingme.domain.chat.repository.ChatRoomRepository;
+import com.pingme.infrastructure.dto.ResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,22 +19,36 @@ public class ChatRoomService {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
+
     @Autowired
     private ChatRoomRepository chatRoomRepository;
 
     //myRoomList
-    public List<ChatRoom> retrieveChatRoom(String request){
-        
-        return chatRoomRepository.findByUsername1OrUsername2(request, request);
+    public List<ChatRoomDTO> retrieveChatRoom(ChatRoomDTO request){
+        return ChatRoomDTO.fromEntityList(chatRoomRepository.findByUsername1OrUsername2(request.getUsername1(), request.getUsername1()));
     }
 
     //lastMsg
-    private ChatMessageDTO retrieveLastMessage(Long msgId){
-        return null;
+    public ChatMessageDTO retrieveLastMessage(ChatRoomDTO request){
+        return ChatMessageDTO.fromEntity(chatMessageRepository.findFirstByMsgIdOrderBySeqDesc(request.getMsgId()).get());
     }
 
-    private Long getUnreadCount(ChatRoomDTO request){
-        return 0l;
+    //create
+    public ResponseDTO createChatRoom(ChatRoomDTO request){
+        chatRoomRepository.save(request.toEntity());
+        return ResponseDTO.builder().resultcode("S").msg(Long.toString(request.getMsgId())).build() ;
+    }
+
+    //delete
+    public ResponseDTO deleteChatRoom(ChatRoomDTO request){
+        chatRoomRepository.deleteById(request.getMsgId());
+        return ResponseDTO.builder().resultcode("S").build();
+    }
+
+
+    public Long getUnreadCount(ChatRoomDTO request){
+        return chatMessageRepository.countByMsgIdAndSenderAndReadYn(request.getMsgId(), request.getUsername1(), 0) + 
+            chatMessageRepository.countByMsgIdAndSenderAndReadYn(request.getMsgId(), request.getUsername2(), 0);
     }
     
 }

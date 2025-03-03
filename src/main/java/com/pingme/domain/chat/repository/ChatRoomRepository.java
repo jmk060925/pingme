@@ -8,4 +8,6 @@ import com.pingme.domain.chat.entity.ChatRoom;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> {
     public List<ChatRoom> findByUsername1OrUsername2(String username1, String username2);
+
+    
 }
