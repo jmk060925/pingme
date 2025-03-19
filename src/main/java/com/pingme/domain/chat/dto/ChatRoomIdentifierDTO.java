@@ -14,12 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ChatMessageIdentifierDTO  implements Serializable{
-
-    private Long seq;
+public class ChatRoomIdentifierDTO  implements Serializable{
 
     private Long msgId;
 
-    private String sender;
-
+    private String username;
 }

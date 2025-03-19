@@ -32,7 +32,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/users/register", "/users/login", "/users/info/*").permitAll()
+            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/users/register", "/users/login", "/ws/**", "/pub/**", "/sub/**", "/error").permitAll()
             //.requestMatchers("/users/follow/*").hasRole("USER")
             .anyRequest().authenticated()
         )
@@ -42,7 +42,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         )
         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
         .cors(Customizer.withDefaults())
-        .formLogin(AbstractHttpConfigurer::disable); // 기본 로그인 필터 제거
+        .formLogin(AbstractHttpConfigurer::disable) // 기본 로그인 필터 제거
+        .httpBasic(AbstractHttpConfigurer::disable); 
 
     return http.build();
 }

@@ -25,30 +25,25 @@ public class ChatRoomService {
 
     //myRoomList
     public List<ChatRoomDTO> retrieveChatRoom(ChatRoomDTO request){
-        return ChatRoomDTO.fromEntityList(chatRoomRepository.findByUsername1OrUsername2(request.getUsername1(), request.getUsername1()));
+        return ChatRoomDTO.fromEntityList(chatRoomRepository.findByUsername(request.getUsername()));
     }
 
-    //lastMsg
+    //lastMsg, 나중에 사용용
     public ChatMessageDTO retrieveLastMessage(ChatRoomDTO request){
         return ChatMessageDTO.fromEntity(chatMessageRepository.findFirstByMsgIdOrderBySeqDesc(request.getMsgId()).get());
     }
 
     //create
     public ResponseDTO createChatRoom(ChatRoomDTO request){
+        //msgId 채번
         chatRoomRepository.save(request.toEntity());
         return ResponseDTO.builder().resultcode("S").msg(Long.toString(request.getMsgId())).build() ;
     }
 
-    //delete
+    //delete, 나중에 사용
     public ResponseDTO deleteChatRoom(ChatRoomDTO request){
-        chatRoomRepository.deleteById(request.getMsgId());
+        //chatRoomRepository.deleteById(request.getMsgId());
         return ResponseDTO.builder().resultcode("S").build();
-    }
-
-
-    public Long getUnreadCount(ChatRoomDTO request){
-        return chatMessageRepository.countByMsgIdAndSenderAndReadYn(request.getMsgId(), request.getUsername1(), 0) + 
-            chatMessageRepository.countByMsgIdAndSenderAndReadYn(request.getMsgId(), request.getUsername2(), 0);
     }
     
 }

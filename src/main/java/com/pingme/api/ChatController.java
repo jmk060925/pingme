@@ -2,7 +2,13 @@ package com.pingme.api;
 
 import java.util.List;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,22 +31,15 @@ public class ChatController {
     private final ChatMessageService chatMessageService;
     private final ChatRoomService chatRoomService;
 
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private final SimpMessageSendingOperations  sendingOperations;
 
     @PostMapping("/room/list")
     public List<ChatRoomDTO> retrieveChatRoomList(@RequestBody ChatRoomDTO request){
         return chatRoomService.retrieveChatRoom(request);
     }
-
-    @PostMapping("/room/list/lastmsg")
-    public ChatMessageDTO retrieveLastMessage(@RequestBody ChatRoomDTO request){
-        return chatRoomService.retrieveLastMessage(request);
-    }
-
     
-    @PostMapping("/room/list/unreadcnt")
-    public Long getUnreadCount(@RequestBody ChatRoomDTO request){
-        return chatRoomService.getUnreadCount(request);
-    }
 
     @PostMapping("/message/list")
     public List<ChatMessageDTO> retrieveMessageList(@RequestBody ChatMessageDTO request){
@@ -48,14 +47,17 @@ public class ChatController {
         return chatMessageService.retrieveMessageList(request);
     }
 
-    @PostMapping("/message/send")
-    public ResponseDTO createMessage(@RequestBody ChatMessageDTO request, Authentication authentication){
-        String username = authentication.getName();
-        return chatMessageService.createMessage(request, username);
+    @MessageMapping("/message/send")
+    @SendTo("/sub/chat/message/receive/1")
+    public ResponseDTO createMessage(@Payload ChatMessageDTO request){
+        
+        log.info(request.toString());
+        //messagingTemplate.convertAndSend("/sub/chat/message/send/" + 1, request);
+        return chatMessageService.createMessage(request);
     }
 
     @PostMapping("/message/receive")
-    public ResponseDTO readMessage(@RequestBody ChatMessageDTO request){
+    public ResponseDTO readMessage(ChatMessageDTO request){
         return chatMessageService.readMessage(request);
     }
 }

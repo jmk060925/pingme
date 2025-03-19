@@ -36,27 +36,28 @@ public class ChatMessageService {
     }
 
     //send
-    public ResponseDTO createMessage(ChatMessageDTO request, String username){
+    public ResponseDTO createMessage(ChatMessageDTO request){
         
         ResponseDTO result = null;
         String msgId = null;
         if(request.getMsgId() != null){
-            result = chatRoomService.createChatRoom(ChatRoomDTO.builder().username1(request.getSender()).build());
-            msgId = result.getResultcode();
+            result = chatRoomService.createChatRoom(ChatRoomDTO.builder().msgId(request.getMsgId()).username(request.getSender()).build());
             request.setMsgId(Long.parseLong(msgId));
+            //chatMessageRepository.save(request.toEntity());
         }
 
-        //messagingTemplate.convertAndSend("/pub/chat/send/" + msgid);
+        log.info("msgId : " + Long.parseLong(msgId));
+        
         //https://star-peanuts.tistory.com/123
         //https://dev-bok.tistory.com/46
+        
+        
 
-
-        chatMessageRepository.save(request.toEntity());
-
-        return ResponseDTO.builder().resultcode("S").build();
+        messagingTemplate.convertAndSend("/sub/chat/message/receive/1", request);
+        return ResponseDTO.builder().resultcode("S").msg(request.getContent()).build();
     }
 
-    //read one by one
+    //read one by one, 나중에 사용
     public ResponseDTO readMessage(ChatMessageDTO request){
         ChatMessage newMsg = chatMessageRepository.findById(ChatMessageIdentifierDTO.builder().seq(request.getSeq()).msgId(request.getMsgId()).build()).get();
 

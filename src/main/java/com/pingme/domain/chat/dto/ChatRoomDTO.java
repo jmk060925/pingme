@@ -22,28 +22,27 @@ public class ChatRoomDTO{
 
     private Long msgId;
 
-    private String username1;
+    private String username;
 
-    private String username2;
 
     public static List<ChatRoomDTO> fromEntityList(List<ChatRoom> entityList){
 
         List<ChatRoomDTO> result = new ArrayList<ChatRoomDTO>();
 
         for(ChatRoom entity : entityList){
-            result.add(ChatRoomDTO.builder().msgId(entity.getMsgId()).username1(entity.getUsername1()).username2(entity.getUsername2()).build());
+            result.add(ChatRoomDTO.builder().msgId(entity.getMsgId()).username(entity.getUsername()).build());
         }
 
         return result;
     }
 
     public static ChatRoomDTO fromEntity(ChatRoom entity){
-        return ChatRoomDTO.builder().msgId(entity.getMsgId()).username1(entity.getUsername1()).username2(entity.getUsername2()).build();
+        return ChatRoomDTO.builder().msgId(entity.getMsgId()).username(entity.getUsername()).build();
     }
 
 
     public ChatRoom toEntity(){
-        return ChatRoom.builder().msgId(this.msgId).username1(this.username1).username2(this.username2).build();
+        return ChatRoom.builder().msgId(this.msgId).username(this.username).build();
     }
 }
 

@@ -1,9 +1,12 @@
 package com.pingme.domain.chat.entity;
+import com.pingme.domain.chat.dto.ChatRoomIdentifierDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +18,7 @@ import lombok.Setter;
 @Table(name="TB_PRIVATE_MSG")
 @Setter
 @Getter
+@IdClass(ChatRoomIdentifierDTO.class)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,9 +28,8 @@ public class ChatRoom {
     @Column(name="MSG_ID", nullable = false)
     private Long msgId;
 
-    @Column(name="USERNAME1", nullable = false)
-    private String username1;
+    @Id
+    @Column(name="USERNAME", nullable = false)
+    private String username;
 
-    @Column(name="USERNAME2", nullable = false)
-    private String username2;
 }
