@@ -2,6 +2,7 @@ package com.pingme.api;
 
 import java.util.List;
 
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,10 +37,10 @@ public class ChatController {
 
     private final SimpMessageSendingOperations  sendingOperations;
 
-    @PostMapping("/room/list")
-    public List<ChatRoomDTO> retrieveChatRoomList(@RequestBody ChatRoomDTO request){
-        return chatRoomService.retrieveChatRoom(request);
-    }
+    // @PostMapping("/room/list")
+    // public List<ChatRoomDTO> retrieveChatRoomList(@RequestBody ChatRoomDTO request){
+    //     return chatRoomService.retrieveChatRoom(request);
+    // }
     
 
     @PostMapping("/message/list")
@@ -48,16 +50,13 @@ public class ChatController {
     }
 
     @MessageMapping("/message/send")
-    @SendTo("/sub/chat/message/receive/1")
-    public ResponseDTO createMessage(@Payload ChatMessageDTO request){
+    //@SendTo("/sub/chat/message/receive/{msgId}")
+    public ResponseDTO createMessage(ChatMessageDTO request, @RequestHeader("Authorization") String token){
         
-        log.info(request.toString());
-        //messagingTemplate.convertAndSend("/sub/chat/message/send/" + 1, request);
-        return chatMessageService.createMessage(request);
+        token = token.replace("Bearer ", "");
+
+        return chatMessageService.createMessage(request, token);
     }
 
-    @PostMapping("/message/receive")
-    public ResponseDTO readMessage(ChatMessageDTO request){
-        return chatMessageService.readMessage(request);
-    }
+
 }

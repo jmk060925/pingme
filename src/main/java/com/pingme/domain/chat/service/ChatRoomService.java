@@ -1,6 +1,7 @@
 package com.pingme.domain.chat.service;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,21 +24,30 @@ public class ChatRoomService {
     @Autowired
     private ChatRoomRepository chatRoomRepository;
 
-    //myRoomList
-    public List<ChatRoomDTO> retrieveChatRoom(ChatRoomDTO request){
-        return ChatRoomDTO.fromEntityList(chatRoomRepository.findByUsername(request.getUsername()));
-    }
-
-    //lastMsg, 나중에 사용용
-    public ChatMessageDTO retrieveLastMessage(ChatRoomDTO request){
-        return ChatMessageDTO.fromEntity(chatMessageRepository.findFirstByMsgIdOrderBySeqDesc(request.getMsgId()).get());
+    // //myRoomList
+    // public List<ChatRoomDTO> retrieveChatRoom(ChatRoomDTO request){
+    //     return ChatRoomDTO.fromEntityList(chatRoomRepository.findById(request.getMsgId()));
+    // } 
+    
+    
+    public ChatRoomDTO retrieveChatRoom(ChatRoomDTO request){
+        return ChatRoomDTO.fromEntity(chatRoomRepository.findByUsername1AndUsername2(request.getUsername1(), request.getUsername2()).get());
     }
 
     //create
     public ResponseDTO createChatRoom(ChatRoomDTO request){
+
+        if(retrieveChatRoom(request) != null || chatRoomRepository.findByUsername1AndUsername2(request.getUsername2(), request.getUsername1()).isEmpty()){
+            return ResponseDTO.builder().resultcode("F").msg("The Chatroom is already exist.").build();
+        }
+
         //msgId 채번
+        Random random = new Random();
+        long msgId = random.nextLong();
+        request.setMsgId(msgId);
+
         chatRoomRepository.save(request.toEntity());
-        return ResponseDTO.builder().resultcode("S").msg(Long.toString(request.getMsgId())).build() ;
+        return ResponseDTO.builder().resultcode("S").msg(Long.toString(request.getMsgId())).build();
     }
 
     //delete, 나중에 사용

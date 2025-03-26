@@ -11,7 +11,9 @@ import com.pingme.domain.chat.dto.ChatMessageIdentifierDTO;
 import com.pingme.domain.chat.dto.ChatRoomDTO;
 import com.pingme.domain.chat.entity.ChatMessage;
 import com.pingme.domain.chat.repository.ChatMessageRepository;
+import com.pingme.domain.chat.repository.ChatRoomRepository;
 import com.pingme.infrastructure.dto.ResponseDTO;
+import com.pingme.infrastructure.jwt.JwtTokenProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +30,9 @@ public class ChatMessageService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
     //msglist, 나중에 페이징 처리 추가
     public List<ChatMessageDTO> retrieveMessageList(ChatMessageDTO request){
         List<ChatMessage> entityList = chatMessageRepository.findByMsgIdOrderBySeqDesc(request.getMsgId());
@@ -35,35 +40,33 @@ public class ChatMessageService {
         return ChatMessageDTO.fromEntityList(entityList);
     }
 
-    //send
-    public ResponseDTO createMessage(ChatMessageDTO request){
-        
-        ResponseDTO result = null;
-        String msgId = null;
-        if(request.getMsgId() != null){
-            result = chatRoomService.createChatRoom(ChatRoomDTO.builder().msgId(request.getMsgId()).username(request.getSender()).build());
-            request.setMsgId(Long.parseLong(msgId));
-            //chatMessageRepository.save(request.toEntity());
-        }
 
-        log.info("msgId : " + Long.parseLong(msgId));
-        
+    //send
+    public ResponseDTO createMessage(ChatMessageDTO request, String token){
+           
         //https://star-peanuts.tistory.com/123
         //https://dev-bok.tistory.com/46
-        
-        
 
-        messagingTemplate.convertAndSend("/sub/chat/message/receive/1", request);
+        //username으로 채팅방 찾기
+
+        
+        String username1 = tokenProvider.getAuthentication(token).getName();
+        String username2 = request.getSender();
+
+        ChatRoomDTO dto = chatRoomService.retrieveChatRoom(ChatRoomDTO.builder().username1(username1).username2(username2).build());
+
+        if(dto == null){
+            dto = chatRoomService.retrieveChatRoom(ChatRoomDTO.builder().username1(username2).username2(username1).build());
+        }
+
+        if(dto != null){
+            request.setMsgId(dto.getMsgId());
+        }else{
+            request.setMsgId(Long.parseLong(chatRoomService.createChatRoom(ChatRoomDTO.builder().title(username1 + "," + username2).username1(username1).username2(username2).build()).getMsg()));
+        }
+    
+        messagingTemplate.convertAndSend("/sub/chat/message/receive/" + request.getMsgId(), request);
         return ResponseDTO.builder().resultcode("S").msg(request.getContent()).build();
-    }
-
-    //read one by one, 나중에 사용
-    public ResponseDTO readMessage(ChatMessageDTO request){
-        ChatMessage newMsg = chatMessageRepository.findById(ChatMessageIdentifierDTO.builder().seq(request.getSeq()).msgId(request.getMsgId()).build()).get();
-
-        newMsg.setReadYn(1);
-
-        return ResponseDTO.builder().resultcode("S").build();
     }
     
 }
